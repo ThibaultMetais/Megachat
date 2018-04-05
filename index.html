@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta lang="fr-FR" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <title>MegaChat</title>
+</head>
+
+<body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/script.js"></script>
+
+  <div class="bg-light">
+    <div class="row bg-primary">
+      <div class="col m-2">
+        <h1 class="text-white">Chat with your friends !</h1>
+      </div>
+      <div class="col-1 mt-2">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Modal">
+          Disconnect
+        </button>
+
+      </div>
+      <div class="col-1">
+        <input type="button" class="btn btn-light m-2" value="New" onclick="window.open('/')" />
+      </div>
+    </div>
+    <br><br><br>
+    <div class="container">
+      <div class="row">
+        <div class="col bg-light pr-6 border-right">
+          <h4>Users connected</h4>
+          <ul id="usersList">
+            <script>
+              var socket = io();
+              var uList = document.getElementById("usersList");
+              socket.on('refreshUserList', function(users) {
+                uList.innerHTML = "";
+                users.forEach(function(user){
+                  var elmnt = document.createElement('li');
+                  if (username == user) {
+                    elmnt.innerHTML = "<b>"+ user + "</b>"
+                  }
+                  else {
+                    elmnt.innerHTML = user
+                  }
+                  uList.appendChild(elmnt);
+                });
+              });
+            </script>
+        </div>
+        <div class="col-6">
+          <div class="container">
+            <input class="form-control" type="text" id="messageTxt" placeholder="Your message">
+          </div>
+          <br/>
+          <div class="container">
+            <ul id="messagesList">
+              <script>
+                var msg = document.getElementById('messageTxt');
+                var list = document.getElementById("messagesList");
+                socket.on('messageFromServer', function(data) {
+                  var item = document.createElement('li');
+                  item.innerHTML = data;
+                  list.appendChild(item);
+                });
+                var username = prompt("Please enter your username");
+                if (username !== null || username !== "") {
+                  socket.username = username;
+                  socket.emit('username entered', socket.username);
+                };
+              </script>
+          </div>
+        </div>
+        <div class="col-1 pl-0 pr-3">
+          <button class="btn btn-primary" id="sendBtn">Send</button>
+          <script type="text/javascript">
+            var btn = document.getElementById("sendBtn");
+            btn.addEventListener('click', function() {
+              socket.emit('messageFromClient', msg.value);
+              msg.value = '';
+            });
+          </script>
+        </div>
+        <div class="col bg-light pl-6 border-left">
+          <h3>Actualités</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+      <div tabindex="-1" role="dialog" class="modal fade" id="Modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+              <p>Do you really want to quit Megachat ?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" id="yesConfirm">Yes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" id="noConfirm">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+        var confirmBtn = document.getElementById("yesConfirm");
+        confirmBtn.addEventListener('click', function() {
+          window.close();
+        });
+      </script>
+      <br><br>
+      <div class="footer">
+        <p> Fait avec amour par Thibault Métais </p>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

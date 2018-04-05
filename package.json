@@ -1,0 +1,13 @@
+{
+  "name": "megachat",
+  "version": "1.0.0",
+  "description": "A website to chat with your friends !",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "ent": "~0.1.0",
+    "express": "^3.3.8",
+    "socket.io": "^1.2.1"
+  },
+  "author": "thibault metais",
+  "license": "ISC"
+}
